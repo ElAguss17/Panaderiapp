@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from .models import Usuario, Producto, Pedido, PedidoDetalle
 from rest_framework import generics, viewsets
-from .serializers import UsuarioSerializer, ProductoSerializer, PedidoSerializer, PedidoDetalleSerializer
+from .serializers import UsuarioSerializer, ProductoSerializer, PedidoSerializer, PedidoDetalleSerializer, PedidoConDetallesSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .custom_jwt_serializers import CustomTokenObtainPairSerializer
 
 
 
@@ -23,10 +25,20 @@ class ProductoViewSet(viewsets.ModelViewSet):
 
 class PedidoViewSet(viewsets.ModelViewSet):
     queryset = Pedido.objects.all()
-    serializer_class = PedidoSerializer
+    serializer_class = PedidoConDetallesSerializer
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        usuario_id = self.request.query_params.get('usuario')
+        if usuario_id:
+            queryset = queryset.filter(cliente_id=usuario_id)
+        return queryset
 
 class PedidoDetalleViewSet(viewsets.ModelViewSet):
     queryset = PedidoDetalle.objects.all()
     serializer_class = PedidoDetalleSerializer
     permission_classes = [AllowAny]
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

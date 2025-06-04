@@ -72,6 +72,24 @@ function Sidebar() {
             Añadir Artículo
           </Link>
         </li>
+        <li>
+          <Link
+            to="/carrito"
+            className={`nav-link${location.pathname === "/carrito" ? " active" : " link-dark"}`}
+          >
+            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#cart" /></svg>
+            Carrito
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/ver-pedidos"
+            className={`nav-link${location.pathname === "/ver-pedidos" ? " active" : " link-dark"}`}
+          >
+            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#list-check" /></svg>
+            Ver Pedidos
+          </Link>
+        </li>
       </ul>
       <hr />
       <div className="dropdown">

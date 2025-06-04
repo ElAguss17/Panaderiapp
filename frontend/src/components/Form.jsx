@@ -19,10 +19,13 @@ function Form({ route, method }) {
 
         try {
             const res = await api.post(route, { username: usuario, password });
+            console.log("Respuesta del backend:", res.data); 
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 localStorage.setItem("usuario", usuario); // Guarda el nombre de usuario
+                localStorage.setItem("usuario_id", res.data.id); // Guarda el id del usuario
+                console.log("ID guardado en localStorage:", res.data.id);
                 navigate("/");
             } else {
                 navigate("/login");

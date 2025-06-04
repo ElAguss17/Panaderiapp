@@ -36,3 +36,15 @@ class PedidoDetalleSerializer(serializers.ModelSerializer):
     class Meta:
         model = PedidoDetalle
         fields = "__all__"
+
+class PedidoDetalleConProductoSerializer(serializers.ModelSerializer):
+    producto = ProductoSerializer()
+    class Meta:
+        model = PedidoDetalle
+        fields = ['detalle_id', 'producto', 'cantidad']
+
+class PedidoConDetallesSerializer(serializers.ModelSerializer):
+    detalles = PedidoDetalleConProductoSerializer(many=True, read_only=True)
+    class Meta:
+        model = Pedido
+        fields = '__all__'

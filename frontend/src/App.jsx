@@ -11,6 +11,8 @@ import NuevoUsuario from "./pages/NuevoUsuario";
 import UsuariosLista from "./pages/UsuariosLista";
 import NuevoArticulo from "./pages/NuevoArticulo";
 import ArticulosLista from "./pages/ArticulosLista";
+import CarritoPedidos from "./components/CarritoPedidos"
+import VerPedidos from "./pages/VerPedidos";
 
 function Logout() {
   localStorage.clear()
@@ -112,6 +114,26 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <NuevoArticulo />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/carrito"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CarritoPedidos/>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ver-pedidos"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <VerPedidos />
               </Layout>
             </ProtectedRoute>
           }
