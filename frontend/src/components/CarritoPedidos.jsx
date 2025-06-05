@@ -51,12 +51,18 @@ export default function CarritoPedidos() {
         }
 
         try {
+            const token = localStorage.getItem('access');
             // 1. Crear el pedido
             const pedidoRes = await api.post("/api/pedidos/", {
                 cliente: usuarioId,
                 fecha_entrega: fechaEntrega,
                 recurrente,
                 fecha_fin: recurrente ? fechaFin : null,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             const pedidoId = pedidoRes.data.pedido_id;
@@ -89,8 +95,8 @@ export default function CarritoPedidos() {
                 <button className="btn btn-success" onClick={hacerPedido} disabled={carrito.length === 0}>
                     Hacer pedido
                 </button>
-                <button className="btn btn-primary" disabled>
-                    Ver pedidos (próximamente)
+                <button className="btn btn-primary" onClick={() => window.location.href = '/ver-pedidos'}>
+                    Ver pedidos
                 </button>
             </div>
             {/* Formulario de fechas y recurrencia */}

@@ -5,6 +5,7 @@ from .serializers import UsuarioSerializer, ProductoSerializer, PedidoSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .custom_jwt_serializers import CustomTokenObtainPairSerializer
+from datetime import date
 
 
 
@@ -42,3 +43,30 @@ class PedidoDetalleViewSet(viewsets.ModelViewSet):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+class PedidosFuturosView(generics.ListAPIView, generics.DestroyAPIView):
+    serializer_class = PedidoConDetallesSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        usuario_id = self.request.query_params.get('usuario')
+        hoy = date.today()
+        qs = Pedido.objects.filter(fecha_entrega__gt=hoy)
+        if usuario_id:
+            qs = qs.filter(cliente_id=usuario_id)
+        return qs
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+class PedidosPasadosView(generics.ListAPIView):
+    serializer_class = PedidoConDetallesSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        usuario_id = self.request.query_params.get('usuario')
+        hoy = date.today()
+        qs = Pedido.objects.filter(fecha_entrega__lte=hoy)
+        if usuario_id:
+            qs = qs.filter(cliente_id=usuario_id)
+        return qs

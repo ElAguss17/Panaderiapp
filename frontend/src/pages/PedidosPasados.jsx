@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../api';
 
-const VerPedidos = () => {
+const PedidosPasados = () => {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,13 +13,12 @@ const VerPedidos = () => {
       try {
         const token = localStorage.getItem('access');
         const userId = localStorage.getItem('usuario_id');
-        // Usar solo pedidos futuros
-        const res = await axios.get(`/api/pedidos-futuros/?usuario=${userId}`, {
+        const res = await axios.get(`/api/pedidos-pasados/?usuario=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPedidos(res.data);
       } catch (err) {
-        setError('Error al cargar los pedidos');
+        setError('Error al cargar los pedidos pasados');
       } finally {
         setLoading(false);
       }
@@ -27,36 +26,22 @@ const VerPedidos = () => {
     fetchPedidos();
   }, []);
 
-  const handleEliminar = async (pedido_id) => {
-    if (!window.confirm('¿Seguro que quieres eliminar este pedido?')) return;
-    try {
-      const token = localStorage.getItem('access');
-      await axios.delete(`/api/pedidos-futuros/${pedido_id}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setPedidos(pedidos.filter(p => p.pedido_id !== pedido_id));
-    } catch (err) {
-      alert('Error al eliminar el pedido');
-    }
-  };
-
-  if (loading) return <div>Cargando pedidos...</div>;
+  if (loading) return <div>Cargando pedidos pasados...</div>;
   if (error) return <div>{error}</div>;
 
-  // Ordenar pedidos de más nuevo a más viejo
   const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Mis Pedidos Futuros</h2>
+      <h2 className="mb-4">Facturas (Pedidos Pasados)</h2>
       {pedidosOrdenados.length === 0 ? (
-        <div className="alert alert-info">No tienes pedidos futuros.</div>
+        <div className="alert alert-info">No tienes pedidos pasados.</div>
       ) : (
         <div className="list-group">
           {pedidosOrdenados.map((pedido) => (
             <div
               key={pedido.pedido_id}
-              className="list-group-item py-4 bg-primary bg-opacity-25 border-0"
+              className="list-group-item py-4 bg-primary bg-opacity-10 border-0"
               style={{ borderRadius: '0.5rem', marginBottom: '1rem' }}
             >
               <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-2 bg-primary bg-opacity-75 p-2 rounded">
@@ -112,8 +97,8 @@ const VerPedidos = () => {
                 </div>
               </div>
               <div className="d-flex justify-content-center mt-3">
-                <button className="btn btn-danger px-4" onClick={() => handleEliminar(pedido.pedido_id)}>
-                  Eliminar
+                <button className="btn btn-success px-4" onClick={() => alert('Funcionalidad de factura próximamente')}>
+                  Factura
                 </button>
               </div>
             </div>
@@ -124,4 +109,4 @@ const VerPedidos = () => {
   );
 };
 
-export default VerPedidos;
+export default PedidosPasados;

@@ -83,11 +83,11 @@ function Sidebar() {
         </li>
         <li>
           <Link
-            to="/ver-pedidos"
-            className={`nav-link${location.pathname === "/ver-pedidos" ? " active" : " link-dark"}`}
+            to="/facturas"
+            className={`nav-link${location.pathname === "/facturas" ? " active" : " link-dark"}`}
           >
-            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#list-check" /></svg>
-            Ver Pedidos
+            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#file-earmark-text" /></svg>
+            Facturas
           </Link>
         </li>
       </ul>

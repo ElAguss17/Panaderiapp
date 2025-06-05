@@ -13,6 +13,7 @@ import NuevoArticulo from "./pages/NuevoArticulo";
 import ArticulosLista from "./pages/ArticulosLista";
 import CarritoPedidos from "./components/CarritoPedidos"
 import VerPedidos from "./pages/VerPedidos";
+import PedidosPasados from "./pages/PedidosPasados";
 
 function Logout() {
   localStorage.clear()
@@ -134,6 +135,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <VerPedidos />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/facturas"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PedidosPasados />
               </Layout>
             </ProtectedRoute>
           }

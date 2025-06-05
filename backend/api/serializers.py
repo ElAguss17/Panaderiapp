@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario,Producto,Pedido,PedidoDetalle # Importa tu modelo personalizado
+from .models import Usuario,Producto,Pedido,PedidoDetalle # Mdelo personalizado
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
