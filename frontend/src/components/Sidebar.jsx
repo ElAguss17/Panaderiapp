@@ -29,15 +29,6 @@ function Sidebar() {
         </li>
         <li>
           <Link
-            to="/notas"
-            className={`nav-link${location.pathname === "/notas" ? " active" : " link-dark"}`}
-          >
-            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table" /></svg>
-            Notas
-          </Link>
-        </li>
-        <li>
-          <Link
             to="/lista-usuarios"
             className={`nav-link${location.pathname === "/lista-usuarios" ? " active" : " link-dark"}`}
           >

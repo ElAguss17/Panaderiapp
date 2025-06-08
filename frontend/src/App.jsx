@@ -6,7 +6,6 @@ import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Layout from "./components/Layout"
-import Notas from "./pages/Notas";
 import NuevoUsuario from "./pages/NuevoUsuario";
 import UsuariosLista from "./pages/UsuariosLista";
 import NuevoArticulo from "./pages/NuevoArticulo";
@@ -45,16 +44,6 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <Logout />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/notas"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Notas />
               </Layout>
             </ProtectedRoute>
           }

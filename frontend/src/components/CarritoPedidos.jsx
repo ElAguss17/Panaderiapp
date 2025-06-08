@@ -20,6 +20,13 @@ export default function CarritoPedidos() {
     pasadoManana.setDate(hoy.getDate() + 2);
     const minFechaEntrega = pasadoManana.toISOString().split("T")[0];
 
+    // Validación extra para evitar fechas pasadas manualmente
+    const isFechaValida = (fecha) => {
+        if (!fecha) return false;
+        const fechaInput = new Date(fecha);
+        return fechaInput >= pasadoManana;
+    };
+
     const agregarAlCarrito = (producto) => {
         setCarrito(prev =>
             prev.find(p => p.producto_id === producto.producto_id)
@@ -41,8 +48,20 @@ export default function CarritoPedidos() {
             alert("Selecciona una fecha de entrega");
             return;
         }
+        if (!isFechaValida(fechaEntrega)) {
+            alert("La fecha de entrega debe ser al menos pasado mañana.");
+            return;
+        }
         if (recurrente && !fechaFin) {
             alert("Selecciona la fecha de fin para el pedido recurrente");
+            return;
+        }
+        if (recurrente && !isFechaValida(fechaFin)) {
+            alert("La fecha de fin debe ser al menos pasado mañana.");
+            return;
+        }
+        if (recurrente && fechaFin < fechaEntrega) {
+            alert("La fecha de fin no puede ser anterior a la de entrega.");
             return;
         }
         if (carrito.length === 0) {
@@ -51,34 +70,51 @@ export default function CarritoPedidos() {
         }
 
         try {
-            const token = localStorage.getItem('access');
-            // 1. Crear el pedido
-            const pedidoRes = await api.post("/api/pedidos/", {
-                cliente: usuarioId,
-                fecha_entrega: fechaEntrega,
-                recurrente,
-                fecha_fin: recurrente ? fechaFin : null,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            const pedidoId = pedidoRes.data.pedido_id;
-
-            // 2. Crear los detalles del pedido (uno por cada producto)
-            await Promise.all(
-                carrito.map(item =>
-                    api.post("/api/pedidosdetalle/", {
-                        pedido: pedidoId,
-                        producto: item.producto_id,
-                        cantidad: item.cantidad,
-                    })
-                )
-            );
-
-            alert("¡Pedido realizado con éxito!");
+            if (recurrente) {
+                // Crear un pedido para cada día entre fechaEntrega y fechaFin (inclusive)
+                let current = new Date(fechaEntrega);
+                const end = new Date(fechaFin);
+                while (current <= end) {
+                    const fechaActual = current.toISOString().split("T")[0];
+                    const pedidoRes = await api.post("/api/pedidos/", {
+                        cliente: usuarioId,
+                        fecha_entrega: fechaActual,
+                        recurrente: true, // marcar como recurrente
+                        fecha_fin: fechaFin, // incluir la fecha de fin original
+                    });
+                    const pedidoId = pedidoRes.data.pedido_id;
+                    await Promise.all(
+                        carrito.map(item =>
+                            api.post("/api/pedidosdetalle/", {
+                                pedido: pedidoId,
+                                producto: item.producto_id,
+                                cantidad: item.cantidad,
+                            })
+                        )
+                    );
+                    current.setDate(current.getDate() + 1);
+                }
+                alert("¡Pedidos recurrentes realizados con éxito!");
+            } else {
+                // Pedido único
+                const pedidoRes = await api.post("/api/pedidos/", {
+                    cliente: usuarioId,
+                    fecha_entrega: fechaEntrega,
+                    recurrente,
+                    fecha_fin: recurrente ? fechaFin : null,
+                });
+                const pedidoId = pedidoRes.data.pedido_id;
+                await Promise.all(
+                    carrito.map(item =>
+                        api.post("/api/pedidosdetalle/", {
+                            pedido: pedidoId,
+                            producto: item.producto_id,
+                            cantidad: item.cantidad,
+                        })
+                    )
+                );
+                alert("¡Pedido realizado con éxito!");
+            }
             setCarrito([]);
             setFechaEntrega("");
             setFechaFin("");

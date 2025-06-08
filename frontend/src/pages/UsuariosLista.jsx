@@ -7,7 +7,7 @@ export default function UsuariosLista() {
 
     return (
         <div className="nuevo-usuario-container">
-            <div className="d-flex justify-content-start mb-3">
+            <div className="d-flex justify-content-start mb-4 mt-3">
                 <button
                     className="btn btn-success btn-lg"
                     onClick={() => navigate("/nuevo-usuario")}
