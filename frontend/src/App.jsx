@@ -13,6 +13,7 @@ import ArticulosLista from "./pages/ArticulosLista";
 import CarritoPedidos from "./components/CarritoPedidos"
 import VerPedidos from "./pages/VerPedidos";
 import PedidosPasados from "./pages/PedidosPasados";
+import PanDiario from "./pages/PanDiario";
 
 function Logout() {
   localStorage.clear()
@@ -134,6 +135,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <PedidosPasados />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pan-diario"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <PanDiario />
               </Layout>
             </ProtectedRoute>
           }

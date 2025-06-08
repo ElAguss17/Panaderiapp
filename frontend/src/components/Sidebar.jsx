@@ -38,15 +38,6 @@ function Sidebar() {
         </li>
         <li>
           <Link
-            to="/nuevo-usuario"
-            className={`nav-link${location.pathname === "/nuevo-usuario" ? " active" : " link-dark"}`}
-          >
-            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#person-plus" /></svg>
-            Añadir Usuario
-          </Link>
-        </li>
-        <li>
-          <Link
             to="/articulos-lista"
             className={`nav-link${location.pathname === "/articulos-lista" ? " active" : " link-dark"}`}
           >
@@ -56,20 +47,20 @@ function Sidebar() {
         </li>
         <li>
           <Link
-            to="/nuevo-articulo"
-            className={`nav-link${location.pathname === "/nuevo-articulo" ? " active" : " link-dark"}`}
-          >
-            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#plus-square" /></svg>
-            Añadir Artículo
-          </Link>
-        </li>
-        <li>
-          <Link
             to="/carrito"
             className={`nav-link${location.pathname === "/carrito" ? " active" : " link-dark"}`}
           >
             <svg className="bi me-2" width="16" height="16"><use xlinkHref="#cart" /></svg>
             Carrito
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/pan-diario"
+            className={`nav-link${location.pathname === "/pan-diario" ? " active" : " link-dark"}`}
+          >
+            <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table" /></svg>
+            Pan Diario
           </Link>
         </li>
         <li>

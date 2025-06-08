@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from rest_framework import routers
-from .views import ProductoViewSet, PedidoViewSet, PedidoDetalleViewSet, UsuarioViewSet, CustomTokenObtainPairView, PedidosFuturosView, PedidosPasadosView
+from .views import ProductoViewSet, PedidoViewSet, PedidoDetalleViewSet, UsuarioViewSet, CustomTokenObtainPairView, PedidosFuturosView, PedidosPasadosView, PanDiarioView
 from api.views import CreateUsuarioView
 
 router = routers.DefaultRouter()
@@ -15,4 +15,5 @@ urlpatterns = [
     path('pedidos-futuros/', PedidosFuturosView.as_view(), name='pedidos-futuros'),
     path('pedidos-futuros/<int:pk>/', PedidosFuturosView.as_view(), name='pedidos-futuros-detail'),
     path('pedidos-pasados/', PedidosPasadosView.as_view(), name='pedidos-pasados'),
+    path('pan-diario/', PanDiarioView.as_view(), name='pan-diario'),
 ] + router.urls

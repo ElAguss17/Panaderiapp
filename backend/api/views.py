@@ -6,6 +6,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .custom_jwt_serializers import CustomTokenObtainPairSerializer
 from datetime import date
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 
@@ -70,3 +72,32 @@ class PedidosPasadosView(generics.ListAPIView):
         if usuario_id:
             qs = qs.filter(cliente_id=usuario_id)
         return qs
+
+class PanDiarioView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        from datetime import date as dt_date
+        fecha = request.query_params.get('fecha')
+        if not fecha:
+            fecha = dt_date.today()
+        detalles = PedidoDetalle.objects.filter(
+            pedido__fecha_entrega=fecha
+        ).select_related('producto', 'pedido__cliente')
+
+        resultado = {}
+        for detalle in detalles:
+            prioridad = str(detalle.pedido.cliente.prioridad)
+            if prioridad not in resultado:
+                resultado[prioridad] = {}
+            prod_id = detalle.producto.producto_id
+            if prod_id not in resultado[prioridad]:
+                resultado[prioridad][prod_id] = {
+                    "producto_id": prod_id,
+                    "nombre": detalle.producto.nombre,
+                    "cantidad_total": 0
+                }
+            resultado[prioridad][prod_id]["cantidad_total"] += detalle.cantidad
+
+        resultado_final = {p: list(prods.values()) for p, prods in resultado.items()}
+        return Response(resultado_final)

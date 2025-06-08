@@ -20,12 +20,15 @@ export default function CarritoPedidos() {
     pasadoManana.setDate(hoy.getDate() + 2);
     const minFechaEntrega = pasadoManana.toISOString().split("T")[0];
 
-    // Validación extra para evitar fechas pasadas manualmente
+    //Comprobar fecha que no sa pasada
+
     const isFechaValida = (fecha) => {
         if (!fecha) return false;
         const fechaInput = new Date(fecha);
         return fechaInput >= pasadoManana;
     };
+
+    // const isFechaValida = () => true;
 
     const agregarAlCarrito = (producto) => {
         setCarrito(prev =>
