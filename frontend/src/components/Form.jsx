@@ -25,7 +25,9 @@ function Form({ route, method }) {
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 localStorage.setItem("usuario", usuario); // Guarda el nombre de usuario
                 localStorage.setItem("usuario_id", res.data.id); // Guarda el id del usuario
+                localStorage.setItem("tipo_usuario", res.data.tipo_usuario); // Guarda el tipo de usuario
                 console.log("ID guardado en localStorage:", res.data.id);
+                console.log("Tipo de usuario guardado en localStorage:", res.data.tipo_usuario);
                 navigate("/");
             } else {
                 navigate("/login");
