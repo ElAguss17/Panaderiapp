@@ -71,17 +71,6 @@ function Sidebar() {
             </Link>
           </li>
         )}
-        {(isAdmin || isPanadero) && (
-          <li>
-            <Link
-              to="/pan-diario"
-              className={`nav-link${location.pathname === "/pan-diario" ? " active" : " link-dark"}`}
-            >
-              <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table" /></svg>
-              Pan Diario
-            </Link>
-          </li>
-        )}
         {(isAdmin || isPanadero || isCliente) && (
           <li>
             <Link

@@ -76,6 +76,7 @@ class Pedido(models.Model):
     fecha_entrega = models.DateField(null=True, blank=True)  # Fecha de la primera entrega
     fecha_fin = models.DateField(null=True, blank=True)  # Fecha de la última entrega (opcional)
     recurrente = models.BooleanField(default=False)  # ¿Es un pedido diario hasta fecha_fin?
+    pagada = models.BooleanField(default=False)  # ¿Está la factura pagada?
 
     class Meta:
         db_table = 'Pedidos'

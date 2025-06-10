@@ -33,7 +33,8 @@ function Form({ route, method }) {
                 navigate("/login");
             }
         } catch (error) {
-            alert(error);
+            console.log("Error al hacer la petición:", error);
+            alert("Algun campo es incorrecto");
         } finally {
             setLoading(false);
         }

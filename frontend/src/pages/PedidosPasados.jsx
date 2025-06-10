@@ -48,6 +48,12 @@ const PedidosPasados = () => {
                 <div className="fs-5 fw-bold mb-2 mb-md-0 text-white">
                   Pedido <span className="text-white">({new Date(pedido.fecha).toLocaleDateString()})</span>
                 </div>
+                {/* SOlo si es admin/panadero muestra el cliente */}
+                {(localStorage.getItem('tipo_usuario') === 'admin' || localStorage.getItem('tipo_usuario') === 'panadero') && (
+                  <div className="text-white fw-semibold">
+                    Cliente: <span className="badge bg-light text-dark">{pedido.cliente_nombre}</span>
+                  </div>
+                )}
               </div>
               <div className="row mb-2 bg-success bg-opacity-75 p-2 rounded">
                 <div className="col-12 col-md-4 mb-1">
@@ -60,9 +66,40 @@ const PedidosPasados = () => {
                   <span className="fw-semibold text-white">Recurrente:</span>
                   <span className={`ms-2 badge ${pedido.recurrente ? 'bg-info text-white' : 'bg-light text-dark border'}`}>{pedido.recurrente ? 'Sí' : 'No'}</span>
                 </div>
-                <div className="col-12 col-md-4 mb-1">
+                <div className="col-12 col-md-4 mb-1 d-flex align-items-center gap-2">
                   <span className="fw-semibold text-white">Fin:</span>
                   <span className={`ms-2 badge ${pedido.fecha_fin ? 'bg-warning text-dark' : 'bg-light text-muted border'}`}>{pedido.fecha_fin || '-'}</span>
+                  {/* Checkbox pagada admin/panadero */}
+                  {(localStorage.getItem('tipo_usuario') === 'admin' || localStorage.getItem('tipo_usuario') === 'panadero') && (
+                    <>
+                      <span className="fw-semibold text-white ms-3">Pagada:</span>
+                      <input
+                        type="checkbox"
+                        checked={pedido.pagada}
+                        onChange={async (e) => {
+                          // Arreglar actualizacion
+                          ////////////////////
+                          ///////////////////
+                          setPedidos(prev => prev.map(p => p.pedido_id === pedido.pedido_id ? { ...p, pagada: e.target.checked } : p));
+                          try {
+                            const token = localStorage.getItem('access');
+                            await axios.patch(`/api/pedidos/${pedido.pedido_id}/`, { pagada: e.target.checked }, {
+                              headers: { Authorization: `Bearer ${token}` },
+                            });
+                          } catch (err) {
+                            alert('Error al actualizar el estado de pagada');
+                            // Si hay error no cambia nada
+                            setPedidos(prev => prev.map(p => p.pedido_id === pedido.pedido_id ? { ...p, pagada: !e.target.checked } : p));
+                          }
+                        }}
+                        style={{ transform: 'scale(1.3)' }}
+                      />
+                    </>
+                  )}
+                  {/* Si no, solo muestra el estado */}
+                  {(localStorage.getItem('tipo_usuario') === 'cliente') && (
+                    <span className={`ms-2 badge ${pedido.pagada ? 'bg-success' : 'bg-secondary'}`}>{pedido.pagada ? 'Pagada' : 'No pagada'}</span>
+                  )}
                 </div>
               </div>
               <div className="mt-2 bg-info bg-opacity-75 p-2 rounded">

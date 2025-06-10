@@ -66,11 +66,12 @@ class PedidosPasadosView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        usuario_id = self.request.query_params.get('usuario')
+        user = self.request.user
         hoy = date.today()
         qs = Pedido.objects.filter(fecha_entrega__lte=hoy)
-        if usuario_id:
-            qs = qs.filter(cliente_id=usuario_id)
+        #validar el usuarios para que solo admin y panaderos vean todos las facturas 
+        if hasattr(user, 'tipo_usuario') and user.tipo_usuario == 'cliente':
+            qs = qs.filter(cliente=user)
         return qs
 
 class PanDiarioView(APIView):

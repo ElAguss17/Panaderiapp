@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Usuario,Producto,Pedido,PedidoDetalle # Mdelo personalizado
+from .models import Usuario, Producto, Pedido, PedidoDetalle  # Mdelo personalizado
+
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,31 +21,39 @@ class UsuarioSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
-    
-    
+
+
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = "__all__"
 
+
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
-        fields = "__all__"
+        fields = "__all__"  # Incluye 'pagada'
+
 
 class PedidoDetalleSerializer(serializers.ModelSerializer):
     class Meta:
         model = PedidoDetalle
         fields = "__all__"
 
+
 class PedidoDetalleConProductoSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer()
+
     class Meta:
         model = PedidoDetalle
-        fields = ['detalle_id', 'producto', 'cantidad']
+        fields = ["detalle_id", "producto", "cantidad"]
+
 
 class PedidoConDetallesSerializer(serializers.ModelSerializer):
-    detalles = PedidoDetalleConProductoSerializer(many=True, read_only=True)
+    detalles = PedidoDetalleSerializer(many=True, source="pedidodetalle_set", read_only=True)
+    cliente_nombre = serializers.CharField(source="cliente.username", read_only=True)
+
     class Meta:
         model = Pedido
-        fields = '__all__'
+        fields = "__all__"
+        extra_fields = ["cliente_nombre"]
