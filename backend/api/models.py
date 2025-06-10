@@ -73,10 +73,10 @@ class Pedido(models.Model):
     pedido_id = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='pedidos')
     fecha = models.DateTimeField(auto_now_add=True)
-    fecha_entrega = models.DateField(null=True, blank=True)  # Fecha de la primera entrega
-    fecha_fin = models.DateField(null=True, blank=True)  # Fecha de la última entrega (opcional)
-    recurrente = models.BooleanField(default=False)  # ¿Es un pedido diario hasta fecha_fin?
-    pagada = models.BooleanField(default=False)  # ¿Está la factura pagada?
+    fecha_entrega = models.DateField(null=True, blank=True)  
+    fecha_fin = models.DateField(null=True, blank=True)
+    recurrente = models.BooleanField(default=False)
+    pagada = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'Pedidos'

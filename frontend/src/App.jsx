@@ -14,6 +14,7 @@ import CarritoPedidos from "./components/CarritoPedidos"
 import VerPedidos from "./pages/VerPedidos";
 import PedidosPasados from "./pages/PedidosPasados";
 import PanDiario from "./pages/PanDiario";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 function Logout() {
   localStorage.clear()
@@ -28,6 +29,7 @@ function RegisterAndLogout() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTopButton />
       <Routes>
         <Route
           path="/"

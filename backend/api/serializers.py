@@ -32,7 +32,7 @@ class ProductoSerializer(serializers.ModelSerializer):
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
-        fields = "__all__"  # Incluye 'pagada'
+        fields = "__all__"
 
 
 class PedidoDetalleSerializer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class PedidoDetalleConProductoSerializer(serializers.ModelSerializer):
 
 
 class PedidoConDetallesSerializer(serializers.ModelSerializer):
-    detalles = PedidoDetalleSerializer(many=True, source="pedidodetalle_set", read_only=True)
+    detalles = PedidoDetalleConProductoSerializer(many=True, read_only=True)
     cliente_nombre = serializers.CharField(source="cliente.username", read_only=True)
 
     class Meta:
