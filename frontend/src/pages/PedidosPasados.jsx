@@ -134,7 +134,10 @@ const PedidosPasados = () => {
                 </div>
               </div>
               <div className="d-flex justify-content-center mt-3">
-                <button className="btn btn-success px-4" onClick={() => alert('Funcionalidad de factura próximamente')}>
+                <button
+                  className="btn btn-success px-4"
+                  onClick={() => window.open(`/api/factura-pdf/${pedido.pedido_id}/`, "_blank")}
+                >
                   Factura
                 </button>
               </div>

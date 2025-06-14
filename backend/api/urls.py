@@ -3,6 +3,7 @@ from . import views
 from rest_framework import routers
 from .views import ProductoViewSet, PedidoViewSet, PedidoDetalleViewSet, UsuarioViewSet, CustomTokenObtainPairView, PedidosFuturosView, PedidosPasadosView, PanDiarioView
 from api.views import CreateUsuarioView
+from .views_factura import factura_pdf
 
 router = routers.DefaultRouter()
 router.register(r'usuarios', UsuarioViewSet)
@@ -16,4 +17,5 @@ urlpatterns = [
     path('pedidos-futuros/<int:pk>/', PedidosFuturosView.as_view(), name='pedidos-futuros-detail'),
     path('pedidos-pasados/', PedidosPasadosView.as_view(), name='pedidos-pasados'),
     path('pan-diario/', PanDiarioView.as_view(), name='pan-diario'),
+    path('factura-pdf/<int:pedido_id>/', factura_pdf, name='factura_pdf'),
 ] + router.urls
