@@ -6,7 +6,7 @@
 
 ## Descripción del Proyecto
 
-Panaderiapp es una aplicación full-stack para la gestión integral de una panadería, permitiendo administrar productos, usuarios y pedidos. La aplicación facilita el seguimiento de inventario, gestión de pedidos y facturación para negocios de panadería, optimizando los procesos diarios de administración y atención al cliente.
+Panaderiapp es una aplicación  para la gestión integral de una panadería, permitiendo administrar productos, usuarios y pedidos. La aplicación facilita el seguimiento de inventario, gestión de pedidos y facturación para negocios de panadería, optimizando la elaboración del os productos  y con ello la atención al cliente.
 
 ## Tecnologías Utilizadas
 
@@ -54,11 +54,7 @@ La comunicación entre componentes se realiza a través de HTTP/S, con los sigui
 4. Las respuestas siguen el camino inverso hasta el cliente
 
 
-### Requisitos Previos
-- AWS CLI configurado con credenciales adecuadas
-- Terraform v1.0+ instalado localmente
-- Cuenta en DuckDNS con un dominio creado
-- Token de DuckDNS para actualización automática de IP
+### La aplicación facilita :
 
 - **Gestión de Productos**:
   - Catálogo completo de productos de panadería
