@@ -24,7 +24,7 @@ function RegistroUsuario({ id }) {
     useEffect(() => {
         if (id) {
             setLoading(true);
-            api.get(`/api/usuarios/${id}/`)
+            api.get(`/usuarios/${id}/`)
                 .then(res => {
                     setForm({
                         ...res.data,
@@ -59,10 +59,10 @@ function RegistroUsuario({ id }) {
         setError("");
         try {
             if (id) {
-                await api.put(`/api/usuarios/${id}/`, form);
+                await api.put(`/usuarios/${id}/`, form);
                 //alert("Usuario actualizado");
             } else {
-                await api.post("/api/user/register/", form);
+                await api.post("/user/register/", form);
                 //alert("Usuario añadido");
             }
             navigate("/lista-usuarios");

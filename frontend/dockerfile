@@ -2,15 +2,25 @@
 FROM node:20 AS build
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm install
 RUN npm run build
 
-# Etapa de producción: usa Nginx para servir los archivos estáticos
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+# Etapa de producción: usa Apache para servir los archivos estáticos
+FROM httpd:2.4
+RUN apt-get update && apt-get install -y nano cron
+COPY --from=build /app/dist/ /usr/local/apache2/htdocs/
 
+# Habilitar módulos necesarios: rewrite para SPA, proxy para API, headers para cabeceras
+RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i '/LoadModule proxy_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i '/LoadModule proxy_http_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i '/LoadModule headers_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
+
+# Copiar configuración personalizada (la iremos ajustando)
+COPY apache.conf /usr/local/apache2/conf/conf.d/app.conf
+
+# Asegurarse de que Apache carga los archivos de conf.d
+RUN echo "Include conf/conf.d/*.conf" >> /usr/local/apache2/conf/httpd.conf
 
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

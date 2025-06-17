@@ -5,26 +5,25 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR para la subred pública."
+variable "public_subnet_a_cidr" {
+  description = "CIDR para la subred pública en us-east-1a."
   type        = string
   default     = "10.0.1.0/24"
 }
 
-variable "private_subnet_cidr" {
-  description = "CIDR para la subred privada."
+variable "private_subnet_a_cidr" {
+  description = "CIDR para la subred privada en us-east-1a."
   type        = string
   default     = "10.0.2.0/24"
 }
 
-
-
-# Bucket
-variable "frontend_bucket_name" {
-  description = "Nombre del bucket para el frontend."
+variable "private_subnet_b_cidr" {
+  description = "CIDR para la subred privada en us-east-1c."
   type        = string
-  default     = "frontend-panaderiapp"
+  default     = "10.0.3.0/24"
 }
+
+
 
 #EC2
 variable "backend_ami_id" {

@@ -13,7 +13,7 @@ const PedidosFuturos = () => {
       try {
         const token = localStorage.getItem('access');
         const userId = localStorage.getItem('usuario_id');
-        const res = await axios.get(`/api/pedidos-futuros/?usuario=${userId}`, {
+        const res = await axios.get(`/pedidos-futuros/?usuario=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPedidos(res.data);
@@ -30,7 +30,7 @@ const PedidosFuturos = () => {
     if (!window.confirm('¿Seguro que quieres eliminar este pedido?')) return;
     try {
       const token = localStorage.getItem('access');
-      await axios.delete(`/api/pedidos-futuros/${pedido_id}/`, {
+      await axios.delete(`/pedidos-futuros/${pedido_id}/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPedidos(pedidos.filter(p => p.pedido_id !== pedido_id));

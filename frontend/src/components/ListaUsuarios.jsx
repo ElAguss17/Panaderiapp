@@ -12,7 +12,7 @@ function ListaUsuarios() {
     useEffect(() => {
         const fetchUsuarios = async () => {
             try {
-                const res = await api.get("/api/usuarios/");
+                const res = await api.get("/usuarios/");
                 setUsuarios(res.data);
             } catch (err) {
                 setError("Error al cargar usuarios");
@@ -26,7 +26,7 @@ function ListaUsuarios() {
     const handleEliminar = async (id) => {
         if (!window.confirm("¿Seguro que quieres eliminar este usuario?")) return;
         try {
-            await api.delete(`/api/usuarios/${id}/`);
+            await api.delete(`/usuarios/${id}/`);
             setUsuarios(usuarios.filter(u => u.id !== id));
         } catch (err) {
             alert("Error al eliminar usuario");

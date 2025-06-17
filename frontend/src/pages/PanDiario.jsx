@@ -13,8 +13,8 @@ export default function PanDiario() {
       try {
         const token = localStorage.getItem("access");
         const hoy = new Date().toISOString().split("T")[0];
-        // Endpoint backend: /api/pan-diario/?fecha=YYYY-MM-DD
-        const res = await axios.get(`/api/pan-diario/?fecha=${hoy}`, {
+        // Endpoint backend: /pan-diario/?fecha=YYYY-MM-DD
+        const res = await axios.get(`/pan-diario/?fecha=${hoy}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProductosPorPrioridad(res.data);

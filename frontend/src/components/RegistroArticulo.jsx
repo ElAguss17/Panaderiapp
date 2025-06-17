@@ -17,7 +17,7 @@ function RegistroArticulo({ id }) {
     useEffect(() => {
         if (id) {
             setLoading(true);
-            api.get(`/api/productos/${id}/`)
+            api.get(`/productos/${id}/`)
                 .then(res => setForm(res.data))
                 .catch(() => setError("Error al cargar artículo"))
                 .finally(() => setLoading(false));
@@ -41,9 +41,9 @@ function RegistroArticulo({ id }) {
         const { nombre, descripcion, precio } = form;
         try {
             if (id) {
-                await api.put(`/api/productos/${id}/`, form);
+                await api.put(`/productos/${id}/`, form);
             } else {
-                await api.post("/api/productos/", form);
+                await api.post("/productos/", form);
             }
             navigate("/articulos-lista");
         } catch (error) {
@@ -57,7 +57,7 @@ function RegistroArticulo({ id }) {
         setLoading(true);
         setError("");
         try {
-            await api.delete(`/api/productos/${id}/`);
+            await api.delete(`/productos/${id}/`);
             navigate("/articulos-lista");
         } catch (error) {
             setError("Fallo al eliminar");

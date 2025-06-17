@@ -7,11 +7,12 @@ export default function CarritoPedidos() {
     const [fechaEntrega, setFechaEntrega] = useState("");
     const [recurrente, setRecurrente] = useState(false);
     const [fechaFin, setFechaFin] = useState("");
+    const [procesandoPedido, setProcesandoPedido] = useState(false);
 
     const usuarioId = localStorage.getItem("usuario_id");
     console.log("ID del usuario:", usuarioId); 
     useEffect(() => {
-        api.get("/api/productos/").then(res => setProductos(res.data));
+        api.get("/productos/").then(res => setProductos(res.data));
     }, []);
 
     // Fecha mínima permitida (pasado mañana)
@@ -43,43 +44,44 @@ export default function CarritoPedidos() {
     };
 
     const hacerPedido = async () => {
-        if (!usuarioId) {
-            alert("Debes iniciar sesión para hacer un pedido.");
-            return;
-        }
-        if (!fechaEntrega) {
-            alert("Selecciona una fecha de entrega");
-            return;
-        }
-        if (!isFechaValida(fechaEntrega)) {
-            alert("La fecha de entrega debe ser al menos pasado mañana.");
-            return;
-        }
-        if (recurrente && !fechaFin) {
-            alert("Selecciona la fecha de fin para el pedido recurrente");
-            return;
-        }
-        if (recurrente && !isFechaValida(fechaFin)) {
-            alert("La fecha de fin debe ser al menos pasado mañana.");
-            return;
-        }
-        if (recurrente && fechaFin < fechaEntrega) {
-            alert("La fecha de fin no puede ser anterior a la de entrega.");
-            return;
-        }
-        if (carrito.length === 0) {
-            alert("El carrito está vacío");
-            return;
-        }
-
+        if (procesandoPedido) return;
+        setProcesandoPedido(true);
         try {
+            if (!usuarioId) {
+                alert("Debes iniciar sesión para hacer un pedido.");
+                return;
+            }
+            if (!fechaEntrega) {
+                alert("Selecciona una fecha de entrega");
+                return;
+            }
+            if (!isFechaValida(fechaEntrega)) {
+                alert("La fecha de entrega debe ser al menos pasado mañana.");
+                return;
+            }
+            if (recurrente && !fechaFin) {
+                alert("Selecciona la fecha de fin para el pedido recurrente");
+                return;
+            }
+            if (recurrente && !isFechaValida(fechaFin)) {
+                alert("La fecha de fin debe ser al menos pasado mañana.");
+                return;
+            }
+            if (recurrente && fechaFin < fechaEntrega) {
+                alert("La fecha de fin no puede ser anterior a la de entrega.");
+                return;
+            }
+            if (carrito.length === 0) {
+                alert("El carrito está vacío");
+                return;
+            }
             if (recurrente) {
                 // Crear un pedido para cada día entre fechaEntrega y fechaFin (inclusive)
                 let current = new Date(fechaEntrega);
                 const end = new Date(fechaFin);
                 while (current <= end) {
                     const fechaActual = current.toISOString().split("T")[0];
-                    const pedidoRes = await api.post("/api/pedidos/", {
+                    const pedidoRes = await api.post("/pedidos/", {
                         cliente: usuarioId,
                         fecha_entrega: fechaActual,
                         recurrente: true, // marcar como recurrente
@@ -88,7 +90,7 @@ export default function CarritoPedidos() {
                     const pedidoId = pedidoRes.data.pedido_id;
                     await Promise.all(
                         carrito.map(item =>
-                            api.post("/api/pedidosdetalle/", {
+                            api.post("/pedidosdetalle/", {
                                 pedido: pedidoId,
                                 producto: item.producto_id,
                                 cantidad: item.cantidad,
@@ -100,7 +102,7 @@ export default function CarritoPedidos() {
                 alert("¡Pedidos recurrentes realizados con éxito!");
             } else {
                 // Pedido único
-                const pedidoRes = await api.post("/api/pedidos/", {
+                const pedidoRes = await api.post("/pedidos/", {
                     cliente: usuarioId,
                     fecha_entrega: fechaEntrega,
                     recurrente,
@@ -109,7 +111,7 @@ export default function CarritoPedidos() {
                 const pedidoId = pedidoRes.data.pedido_id;
                 await Promise.all(
                     carrito.map(item =>
-                        api.post("/api/pedidosdetalle/", {
+                        api.post("/pedidosdetalle/", {
                             pedido: pedidoId,
                             producto: item.producto_id,
                             cantidad: item.cantidad,
@@ -125,13 +127,15 @@ export default function CarritoPedidos() {
         } catch (error) {
             alert("Error al realizar el pedido");
             console.error(error);
+        } finally {
+            setProcesandoPedido(false);
         }
     };
 
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between mb-3">
-                <button className="btn btn-success" onClick={hacerPedido} disabled={carrito.length === 0}>
+                <button className="btn btn-success" onClick={hacerPedido} disabled={carrito.length === 0 || procesandoPedido}>
                     Hacer pedido
                 </button>
                 <button className="btn btn-primary" onClick={() => window.location.href = '/ver-pedidos'}>

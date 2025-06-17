@@ -14,7 +14,7 @@ const VerPedidos = () => {
         const token = localStorage.getItem('access');
         const userId = localStorage.getItem('usuario_id');
         // Usar solo pedidos futuros
-        const res = await axios.get(`/api/pedidos-futuros/?usuario=${userId}`, {
+        const res = await axios.get(`/pedidos-futuros/?usuario=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPedidos(res.data);
@@ -31,7 +31,7 @@ const VerPedidos = () => {
     if (!window.confirm('¿Seguro que quieres eliminar este pedido?')) return;
     try {
       const token = localStorage.getItem('access');
-      await axios.delete(`/api/pedidos-futuros/${pedido_id}/`, {
+      await axios.delete(`/pedidos-futuros/${pedido_id}/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPedidos(pedidos.filter(p => p.pedido_id !== pedido_id));
@@ -61,14 +61,14 @@ const VerPedidos = () => {
             >
               <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-2 bg-primary bg-opacity-75 p-2 rounded">
                 <div className="fs-5 fw-bold mb-2 mb-md-0 text-white">
-                  Pedido <span className="text-white">({new Date(pedido.fecha).toLocaleDateString()})</span>
+                  Entrega: <span className="text-white">({pedido.fecha_entrega})</span>
                 </div>
               </div>
               <div className="row mb-2 bg-success bg-opacity-75 p-2 rounded">
                 <div className="col-12 col-md-4 mb-1">
-                  <span className="fw-semibold text-white">Entrega:</span>
+                  <span className="fw-semibold text-white">Pedido:</span>
                   <span className="ms-2 badge bg-success text-white border border-success-subtle rounded-pill">
-                    {pedido.fecha_entrega}
+                    {new Date(pedido.fecha).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="col-12 col-md-4 mb-1">

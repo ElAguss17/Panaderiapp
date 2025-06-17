@@ -20,7 +20,7 @@ function Home() {
           const token = localStorage.getItem("access");
           const userId = localStorage.getItem("usuario_id");
           const hoy = new Date().toISOString().split("T")[0];
-          const res = await api.get(`/api/pedidos-pasados/?usuario=${userId}`);
+          const res = await api.get(`/pedidos-pasados/?usuario=${userId}`);
           // Filtrar solo el pedido de hoy
           const pedidosHoy = res.data.filter(p => p.fecha_entrega === hoy);
           setPedidoHoy(pedidosHoy);

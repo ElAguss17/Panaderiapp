@@ -12,7 +12,7 @@ function ListaArticulos() {
     useEffect(() => {
         const fetchArticulos = async () => {
             try {
-                const res = await api.get("/api/productos/");
+                const res = await api.get("/productos/");
                 setArticulos(res.data);
             } catch (err) {
                 setError("Error al cargar artículos");
@@ -26,7 +26,7 @@ function ListaArticulos() {
     const handleEliminar = async (id) => {
         if (!window.confirm("¿Seguro que quieres eliminar este artículo?")) return;
         try {
-            await api.delete(`/api/productos/${id}/`);
+            await api.delete(`/productos/${id}/`);
             setArticulos(articulos.filter(a => a.id !== id));
         } catch (err) {
             alert("Error al eliminar artículo");

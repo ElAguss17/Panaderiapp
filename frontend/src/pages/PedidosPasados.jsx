@@ -13,7 +13,7 @@ const PedidosPasados = () => {
       try {
         const token = localStorage.getItem('access');
         const userId = localStorage.getItem('usuario_id');
-        const res = await axios.get(`/api/pedidos-pasados/?usuario=${userId}`, {
+        const res = await axios.get(`/pedidos-pasados/?usuario=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPedidos(res.data);
@@ -46,7 +46,7 @@ const PedidosPasados = () => {
             >
               <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-2 bg-primary bg-opacity-75 p-2 rounded">
                 <div className="fs-5 fw-bold mb-2 mb-md-0 text-white">
-                  Pedido <span className="text-white">({new Date(pedido.fecha).toLocaleDateString()})</span>
+                  Entrega: <span className="text-white">({pedido.fecha_entrega})</span>
                 </div>
                 {/* SOlo si es admin/panadero muestra el cliente */}
                 {(localStorage.getItem('tipo_usuario') === 'admin' || localStorage.getItem('tipo_usuario') === 'panadero') && (
@@ -57,9 +57,9 @@ const PedidosPasados = () => {
               </div>
               <div className="row mb-2 bg-success bg-opacity-75 p-2 rounded">
                 <div className="col-12 col-md-4 mb-1">
-                  <span className="fw-semibold text-white">Entrega:</span>
+                  <span className="fw-semibold text-white">Pedido:</span>
                   <span className="ms-2 badge bg-success text-white border border-success-subtle rounded-pill">
-                    {pedido.fecha_entrega}
+                    {new Date(pedido.fecha).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="col-12 col-md-4 mb-1">
@@ -83,7 +83,7 @@ const PedidosPasados = () => {
                           setPedidos(prev => prev.map(p => p.pedido_id === pedido.pedido_id ? { ...p, pagada: e.target.checked } : p));
                           try {
                             const token = localStorage.getItem('access');
-                            await axios.patch(`/api/pedidos/${pedido.pedido_id}/`, { pagada: e.target.checked }, {
+                            await axios.patch(`/pedidos/${pedido.pedido_id}/`, { pagada: e.target.checked }, {
                               headers: { Authorization: `Bearer ${token}` },
                             });
                           } catch (err) {
@@ -136,7 +136,7 @@ const PedidosPasados = () => {
               <div className="d-flex justify-content-center mt-3">
                 <button
                   className="btn btn-success px-4"
-                  onClick={() => window.open(`/api/factura-pdf/${pedido.pedido_id}/`, "_blank")}
+                  onClick={() => window.open(`/factura-pdf/${pedido.pedido_id}/`, "_blank")}
                 >
                   Factura
                 </button>

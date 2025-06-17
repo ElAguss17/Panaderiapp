@@ -31,7 +31,7 @@ function RegistroUsuario({ }) {
         setError(""); // Limpia error anterior
         console.log("Datos enviados:", form);
         try {
-            await api.post("/api/user/register/", form);
+            await api.post("/user/register/", form);
             alert("Usuario añadido");
             setForm({
                 username: "",
