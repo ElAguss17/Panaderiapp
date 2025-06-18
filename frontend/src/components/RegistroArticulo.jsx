@@ -11,6 +11,7 @@ function RegistroArticulo({ id }) {
         precio: "",
     });
     const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar envíos múltiples
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -35,10 +36,15 @@ function RegistroArticulo({ id }) {
     };
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
+        
+        // Si ya está en proceso de envío, evitar múltiples envíos
+        if (isSubmitting) return;
+        
+        setIsSubmitting(true);
+        setLoading(true);
         setError("");
-        const { nombre, descripcion, precio } = form;
+        
         try {
             if (id) {
                 await api.put(`/productos/${id}/`, form);
@@ -47,7 +53,9 @@ function RegistroArticulo({ id }) {
             }
             navigate("/articulos-lista");
         } catch (error) {
+            console.error("Error al guardar:", error);
             setError("Fallo al guardar");
+            setIsSubmitting(false); // Permitir reintentar en caso de error
         } finally {
             setLoading(false);
         }
@@ -77,8 +85,9 @@ function RegistroArticulo({ id }) {
             <button
                 type="submit"
                 className={`btn ${id ? "btn-primary" : "btn-success"} btn-lg w-100 mt-3`}
+                disabled={isSubmitting} // Deshabilitar el botón durante el envío
             >
-                {id ? "Actualizar" : "Registrar"}
+                {isSubmitting ? "Procesando..." : (id ? "Actualizar" : "Registrar")}
             </button>
         </form>
     );

@@ -27,8 +27,11 @@ function ListaArticulos() {
         if (!window.confirm("¿Seguro que quieres eliminar este artículo?")) return;
         try {
             await api.delete(`/productos/${id}/`);
-            setArticulos(articulos.filter(a => a.id !== id));
+            // Corregido: filtrar por producto_id en lugar de id
+            setArticulos(articulos.filter(a => a.producto_id !== id));
+            navigate("/articulos-lista");
         } catch (err) {
+            console.error("Error al eliminar:", err);
             alert("Error al eliminar artículo");
         }
     };

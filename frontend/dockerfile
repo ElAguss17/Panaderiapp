@@ -11,16 +11,24 @@ FROM httpd:2.4
 RUN apt-get update && apt-get install -y nano cron
 COPY --from=build /app/dist/ /usr/local/apache2/htdocs/
 
-# Habilitar módulos necesarios: rewrite para SPA, proxy para API, headers para cabeceras
+# Habilitar módulos necesarios: rewrite para SPA, proxy para API, headers para cabeceras, SSL para HTTPS
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/LoadModule proxy_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/LoadModule proxy_http_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
-    sed -i '/LoadModule headers_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
+    sed -i '/LoadModule headers_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i '/LoadModule ssl_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i '/LoadModule socache_shmcb_module/s/^#//g' /usr/local/apache2/conf/httpd.conf
 
-# Copiar configuración personalizada (la iremos ajustando)
+# Copiar configuración personalizada
 COPY apache.conf /usr/local/apache2/conf/conf.d/app.conf
+COPY ssl.conf /usr/local/apache2/conf/conf.d/ssl.conf
+
+# Copiar certificados SSL
+COPY ssl_certs/fullchain.pem /home/fullchain.pem
+COPY ssl_certs/privkey.pem /home/privkey.pem
 
 # Asegurarse de que Apache carga los archivos de conf.d
 RUN echo "Include conf/conf.d/*.conf" >> /usr/local/apache2/conf/httpd.conf
 
-EXPOSE 80
+# Exponer puertos HTTP y HTTPS
+EXPOSE 80 443

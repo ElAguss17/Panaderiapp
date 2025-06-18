@@ -158,7 +158,7 @@ resource "aws_instance" "frontend" {
     apt-get install -y docker.io nano curl cron
     systemctl start docker
     systemctl enable docker
-    docker run -d --restart always --name frontend -p 80:80 agustin17/panaderiapp-frontend:latest
+    docker run -d --restart always --name frontend -p 80:80 agustin17/panaderiapp-frontend:https
   EOF
   
   tags = {
